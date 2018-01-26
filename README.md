@@ -1,5 +1,5 @@
 # RulesBot
-[DBL](https://discordbots.org/bot/389082834670845952)
+[DBL](https://discordbots.org/bot/389082834670845952) <br>
 [My Website](https://thebotdev.de)
 
 ## Install
