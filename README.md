@@ -7,3 +7,5 @@
 
 **Step 2:** Clone this repository with git clone "https://github.com/BaseChip/RulesBot"
 
+## About this project
+I don't develop this project any more and therefore it is now also open source. If someone would like to develop this project further he should do this gladly and then I would be happy if he would create an pull-request this also here. If I like the update, I'll give that one premium for my other bots and the developer roll on my [discord](https://discord.gg/HD7x2vx).  
