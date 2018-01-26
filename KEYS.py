@@ -1,2 +1,2 @@
-TOKEN="YOUR TOKEN INSERT HERE"
+TOKEN="Insert your TOKEN here"
 PREFIX="!"
