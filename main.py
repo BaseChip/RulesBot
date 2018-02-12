@@ -32,7 +32,6 @@ class MyClient(discord.Client):
 				embed.add_field(name="Project", value="TheBotDev", inline=True)
 				embed.add_field(name="Support server:", value="https://discord.gg/HD7x2vx", inline=False)
 				embed.add_field(name="Invite me to your server:", value="!invite", inline=True)
-				embed.add_field(name='Inspiration', value='Inspired by the basic idea of [Flash](https://flashbot.de/invite)', inline=False)
 				embed.add_field(name="other", value="This is a fork from my GitHub Bot RulesBot")
 				embed.set_footer(text="Thanks for using!")
 				await message.channel.send(embed=embed)
