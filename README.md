@@ -13,3 +13,6 @@ I don't develop this project any more and therefore it is now also open source. 
 -----
 # Important
 If you want to use this bot, you have to insert your token in the KEYS.py file
+
+## Inspired
+This bot is inspired by the Rubicon Bot
