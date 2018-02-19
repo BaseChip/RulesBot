@@ -5,7 +5,6 @@ import datetime
 import sched
 import aiohttp
 import json
-#from discord import *
 import KEYS
 conn = sqlite3.connect("rulesbot.db")
 cur = conn.cursor()
