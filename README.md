@@ -1,18 +1,95 @@
-# RulesBot
-[DBL](https://discordbots.org/bot/389082834670845952) <br>
-[My Website](https://thebotdev.de)
+# env_RulesBot
+> Create server rules new users need to confirm first in order to access the server
+<br>
+<a href="https://discordbots.org/bot/389082834670845952" >
+  <img src="https://discordbots.org/api/widget/servers/389082834670845952.svg" alt="Server count" />
+</a>
+<a href="https://discordbots.org/bot/389082834670845952" >
+  <img src="https://discordbots.org/api/widget/status/389082834670845952.svg" alt="Status" />
+</a>
 
-## Install
-**Step 1**: Make sure, you have git/[rewrite api](https://gist.github.com/BaseChip/e5d4583ad5392cd9638410c25d24547e) and sqlite3 installed
+The Rules Bot helps you managing new members by providing an automated verification system using Discord's message reactions.
+
+<img src="https://thebotdev.de/img/bot_img.png" alt="Logo" width=200>
+<a href="https://discord.gg/HD7x2vx">
+    <img src="https://canary.discordapp.com/api/guilds/385848724628439062/widget.png?style=banner2" >
+</a>
+
+## You need
+
+OS X & Linux:
+
+You need:
+```sh
+• https://github.com/Rapptz/discord.py/archive/rewrite.zip
+• aiohttp
+• peewee
+• python3.6
+```
+## Usage example
+
+With RulesBot you can create a rule message to ensure that all your users accept your rules to use your server. Furthermore, this bot can add several reactions to your message, which automatically assigns a certain role to the users.
+
+_You can also visit our [website][wiki]._
+
+## Development setup
+
+**Step 1**: Make sure, you have the [requirment packages](requirements.txt) installed
 
 **Step 2:** Clone this repository with git clone `https://github.com/BaseChip/RulesBot`
 
-## About this project
-I don't develop this project any more and therefore it is now also open source. If someone would like to develop this project further he should do this gladly and then I would be happy if he would create an pull-request. If I like the update, I'll give that one premium for my other bots and the developer roll on my [discord](https://discord.gg/HD7x2vx).  
+**Step 3:** Insert your Token into KEYS.py 
 
------
-# Important
-If you want to use this bot, you have to insert your token in the KEYS.py file
+**Step 4:** run the bot with python3.6 main.py
 
-## Inspired
-This bot is inspired by the Rubicon Bot
+## Release History
+<img src="https://img.shields.io/badge/Version-2.0-green.svg" alt="version">
+
+* v2
+    * NEW: emojis under a message to get a role
+    * NEW: recovery command (-restore)
+    * NEW: this README
+    * CHANGE: Complete Rewrite
+    * CHANGE: Now channel mention instead of the channel id
+    * CHANGE: better ping message
+    * CHANGE: more error checks during the setup
+    * CHANGE: eval command for the bot owner(s)
+    * CHANGE: new texts
+    * BUG FIX: if you have too many roles the setup will now also work
+    * BUG FIX: thee bot test now his permissions during the setup
+    * BUG FIX: when reaction is removed -> role will be removed 
+    * REMOVE: Time part in the setup
+
+
+## Meta
+
+Bot by: BaseChip#2390 // romangraef89#0998 // Skidder#0001
+<br>
+##### Support server: https://discord.gg/HD7x2vx
+
+## Contributing
+
+1. Fork it (<https://github.com/basechip/RulesBot/fork>)
+2. Create your feature branch (`git checkout -b feature/fooBar`)
+3. Commit your changes (`git commit -am 'Add some fooBar'`)
+4. Push to the branch (`git push origin feature/fooBar`)
+5. Create a new Pull Request
+
+## Self-hosting Agreement
+* You may not use the Rules Bot logo or name within derivative bots.
+* You may not host a public version of Rules Bot.
+* You may not charge for the usage of your instance of Rules Bot.
+* You may not provide support for Rules Bot.
+## Sponsoring
+**Partner**<br>
+https://dyn-box.de
+<br>
+**Donator**
+* solana Dracunculas#0297
+<!-- Markdown link & img dfn's -->
+[npm-image]: https://img.shields.io/npm/v/datadog-metrics.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/datadog-metrics
+[npm-downloads]: https://img.shields.io/npm/dm/datadog-metrics.svg?style=flat-square
+[travis-image]: https://img.shields.io/travis/dbader/node-datadog-metrics/master.svg
+[travis-url]: https://thebotdev.de
+[wiki]: https://thebotdev.de
