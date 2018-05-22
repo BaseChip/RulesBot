@@ -71,7 +71,7 @@ class AdvancedAwaiter:
 
         try:
             mes = await self.bot.wait_for('message', check=lambda mes: self.check_author(mes) and check(mes),
-                                          timeout=30)
+                                          timeout=120)
             if mes.content.lower() == "@cancel@":
                 raise AwaitCanceled
             return mes

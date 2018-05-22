@@ -45,6 +45,14 @@ _You can also visit our [website][wiki]._
 ## Release History
 <img src="https://img.shields.io/badge/Version-2.0-green.svg" alt="version">
 
+
+* v2.1
+    * NEW: extra Bot file for an bot who can test if the bot is online
+    * NEW: mention in the log messages
+    * CHANGE: some bugfixes
+    * CHANGE: time out time now 120 sec.
+    * CHANGE: better join message
+    
 * v2
     * NEW: emojis under a message to get a role
     * NEW: recovery command (-restore)

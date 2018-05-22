@@ -8,4 +8,5 @@ def setup(bot: commands.Bot):
     @bot.command()
     @commands.is_owner()
     async def stop(ctx: CommandContext):
-        sys.exit(0)
+        return
+        #sys.exit(0)

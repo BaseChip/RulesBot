@@ -96,14 +96,15 @@ class GuildManagement(object):
                 embed=Embed(
                     color=Color.green(),
                     description=rules_text).set_footer(
-                    text="Please accept the rules with ✅ or decline them with ❌ "))
+                    text="Please accept the rules with ✅ or decline them with ❌"))
 
             await rules.add_reaction("✅")
             await rules.add_reaction("❌")
             try:
                 if existing_rules.exists():
                     existing_rules: ServerData = existing_rules.get()
-                    existing_rules.delete().execute()
+                    existing_rules.delete_instance()
+
                 ServerData.create(
                     ruleschannel=rules_channel.id,
                     ruletext=rules_text,
@@ -145,7 +146,7 @@ class GuildManagement(object):
     @commands.guild_only()
     async def pchange(self, ctx: CommandContext):
         awaiter: AdvancedAwaiter = AdvancedAwaiter(ctx)
-        settings: ServerSettings = ServerSettings.select().where(ServerSettings.gid == ctx.guild.id).get()
+        settings: ServerSettings = ServerSettings.get_or_insert(ctx.guild)
         mes: Message = await awaiter(
             text='Your current prefix is `%s`. Now just send me the new prefix' % settings.prefix)
         settings.prefix = mes.content

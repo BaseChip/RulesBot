@@ -2,7 +2,7 @@ import discord
 
 
 async def handle_info(message: discord.Message):
-    embed = discord.Embed(title="Bot by:", description="BaseChip, RomanGreaf, Skidder", color=0x27fcfc)
+    embed = discord.Embed(title="Bot by:", description="BaseChip, RomanGraef, Skidder", color=0x27fcfc)
     embed.set_author(name="Bot Info", icon_url="https://thebotdev.de/assets/img/Fragezeichen.png")
     embed.add_field(name="Project", value="TheBotDev", inline=True)
     embed.add_field(name="Logo/website designed by:", value="tobimori", inline=False)

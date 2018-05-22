@@ -18,7 +18,7 @@ s = sched.scheduler(time.time, time.sleep)
 def get_server_prefix(bot: commands.Bot, message: discord.Message):
     if not message.guild:
         return '-'
-    server_settings: ServerSettings = ServerSettings.select().where(ServerSettings.gid == message.guild.id).get()
+    server_settings: ServerSettings = ServerSettings.get_or_insert(message.guild)
     return commands.when_mentioned_or(server_settings.prefix)(bot, message)
 
 
@@ -27,6 +27,8 @@ client: commands.Bot = commands.Bot(
 )
 
 client.remove_command('help')
+
+db.create_tables([ServerData, ServerSettings, UserData, ReactionAction])
 
 
 async def on_command_error(ctx: commands.Context, exc: BaseException):
