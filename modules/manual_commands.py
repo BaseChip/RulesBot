@@ -3,7 +3,7 @@ import time
 
 import aiohttp
 import discord
-from discord import Embed, Color, Message, TextChannel, Guild
+from discord import Embed, Color, Message, TextChannel
 from discord import Webhook, AsyncWebhookAdapter
 from discord.ext import commands
 from discord.raw_models import RawReactionActionEvent
@@ -31,6 +31,7 @@ class ManualCog(object):
                             "please join the support server https://discord.gg/HD7x2vx" % code))
 
     async def on_ready(self):
+        db.create_tables([ServerData, ServerSettings, UserData, ReactionAction])
         game = discord.Game(name="-help | Sponsored by dyn-box.de")
         await self.bot.change_presence(status=discord.Status.online, activity=game)
         print("Login erfolgreich!")
@@ -38,8 +39,9 @@ class ManualCog(object):
 
     async def on_message(self, message):
         guild = message.guild
-        server_data: ServerData = ServerData.get_or_insert(guild)
-        server_settings: ServerSettings = ServerSettings.get_or_insert(guild)
+        print(guild.id)
+        server_data: ServerData = ServerData.select().where(ServerData.serverid == guild.id).get()
+        server_settings: ServerSettings = ServerSettings.select().where(ServerSettings.gid == guild).get()
         prefix = server_settings.prefix
         inleng = len(prefix)
 
@@ -52,7 +54,6 @@ class ManualCog(object):
                 embed.add_field(name="User", value=str(len(self.bot.users)))
                 await message.channel.send(embed=embed)
             if invoke == "info":
-                print("Hey")
                 await handle_info(message=message)
             if invoke == "invite":
                 embed = discord.Embed(title="Click to invite",
@@ -82,24 +83,22 @@ class ManualCog(object):
         channel_id = event.channel_id
         user_id = event.user_id
         emoji = event.emoji
-        gu: TextChannel = self.bot.get_channel(channel_id)
-        guild: int = gu.guild.id
+        gu = self.bot.get_channel(channel_id)
+        guild = gu.guild.id
         channel: TextChannel = self.bot.get_channel(channel_id)
         message: Message = await channel.get_message(message_id)
-        gugui: Guild = gu.guild
+        gugui = self.bot.get_guild(guild)
         user: discord.Member = gugui.get_member(user_id)
         if user.bot:
             return
-        server_data: ServerData = ServerData.get_or_insert(gugui)
-        rule_message_id = server_data.messageid
+        server_data: ServerData = ServerData.select().where(ServerData.serverid == guild).get()
+        ruleschannel = server_data.messageid
         username = user.name
         userid = user.id
         roleid = server_data.roleid
         role = discord.utils.get(gugui.roles, id=roleid)
         user_data: UserData = UserData.get_or_insert(user)
-        if server_data.messageid is None:
-            return
-        if int(message_id) == int(server_data.messageid):
+        if message_id == ruleschannel:
             if str(emoji) == "✅":
                 await user.add_roles(role, reason="accepted the rules", atomic=True)
                 await self.logmsgaccepted(user, username, guild)
@@ -148,7 +147,7 @@ class ManualCog(object):
         guild = gu.guild.id
         gugui = self.bot.get_guild(guild)
         user: discord.Member = gugui.get_member(user_id)
-        server_data: ServerData = ServerData.get_or_insert(gugui)
+        server_data: ServerData = ServerData.select().where(ServerData.serverid == guild).get()
         ruleschannel = server_data.messageid
         username = user.name
         userid = user.id
@@ -165,80 +164,13 @@ class ManualCog(object):
                 user_data.save()
             db.commit()
 
-    async def on_guild_remove(self, guild):
-        async with aiohttp.ClientSession() as session:
-            webhook = Webhook.from_url(
-                'https://discordapp.com/api/webhooks/443030951392575488/VedZ5Xy5X5pS-qZZKs8jVfKI-jdmItXgOpsc8469N0gxNeYHgfJPZ9g4GUY5lt-_KNow',
-                adapter=AsyncWebhookAdapter(session))
-            await webhook.send(embed=discord.Embed(color=discord.Color.red(), description='❌ Server left: %s\nID:'
-                                                                                          ' %s\nOwner: %s\nServercount'
-                                                                                          ' nun: %s' % (
-                                                                                              guild.name, guild.id,
-                                                                                              guild.owner,
-                                                                                              len(self.bot.guilds))),
-                               username='RulesBot')
-        headers2 = {
-            'Authorization': KEYS.BOTWORLD,
-            'content-type': 'application/json'}
-        data2 = '{ "guild_count": ' + str(len(self.bot.guilds)) + ' }'
-        api_url2 = 'https://discordbot.world/api/bot/389082834670845952/stats'
-        async with aiohttp.ClientSession() as session:
-            await session.post(api_url2, data=data2, headers=headers2)
-
-        headers = {
-            'Authorization': KEYS.DISCORDBOTS}
-        data = {'server_count': len(self.bot.guilds)}
-        api_url = 'https://discordbots.org/api/bots/389082834670845952/stats'
-        async with aiohttp.ClientSession() as session:
-            await session.post(api_url, data=data, headers=headers)
-
-        headers = {
-            'Authorization': KEYS.BOTLISTSPACE}
-        data = {'server_count': len(self.bot.guilds)}
-        api_url = 'https://botlist.space/api/bots/389082834670845952'
-        async with aiohttp.ClientSession() as session:
-            await session.post(api_url, data=data, headers=headers)
-
     async def on_guild_join(self, guild):
         server_settings: ServerSettings = ServerSettings.get_or_insert(guild)
         server_data: ServerData = ServerData.get_or_insert(guild)
         db.commit()
         await guild.owner.send(content="Hey thanks for adding me to your server!\n"
-                                       "If you don't know how to use me yet, please enter -help on your server to see"
-                                       " all my commands or read our documentation on https://docs.thebotdev.de")
-        async with aiohttp.ClientSession() as session:
-            webhook = Webhook.from_url(
-                'https://discordapp.com/api/webhooks/443030951392575488/VedZ5Xy5X5pS-qZZKs8jVfKI-jdmItXgOpsc8469N0gxNeYHgfJPZ9g4GUY5lt-_KNow',
-                adapter=AsyncWebhookAdapter(session))
-            await webhook.send(embed=discord.Embed(color=discord.Color.green(), description='Server jointed:'
-                                                                                            ' %s\nID: %s\nOwner: '
-                                                                                            '%s\nServercount nun: %s' % (
-                                                                                                guild.name, guild.id,
-                                                                                                guild.owner,
-                                                                                                len(self.bot.guilds))),
-                               username='RulesBot')
-            # evtl mal mit Invite
-        headers2 = {
-            'Authorization': KEYS.BOTWORLD,
-            'content-type': 'application/json'}
-        data2 = '{ "guild_count": ' + str(len(self.bot.guilds)) + ' }'
-        api_url2 = 'https://discordbot.world/api/bot/389082834670845952/stats'
-        async with aiohttp.ClientSession() as session:
-            await session.post(api_url2, data=data2, headers=headers2)
-
-        headers = {
-            'Authorization': KEYS.DISCORDBOTS}
-        data = {'server_count': len(self.bot.guilds)}
-        api_url = 'https://discordbots.org/api/bots/389082834670845952/stats'
-        async with aiohttp.ClientSession() as session:
-            await session.post(api_url, data=data, headers=headers)
-
-        headers = {
-            'Authorization': KEYS.BOTLISTSPACE}
-        data = {'server_count': len(self.bot.guilds)}
-        api_url = 'https://botlist.space/api/bots/389082834670845952'
-        async with aiohttp.ClientSession() as session:
-            await session.post(api_url, data=data, headers=headers)
+                                       "If you wont get started please type in on your guild `-help` or you can change"
+                                       " my prefix with `-pchange`")
 
     async def on_member_join(self, member):
         usrid = member.id
@@ -257,7 +189,7 @@ class ManualCog(object):
         if usrname != "Rules Bot":  # CHANGE IMPORTANT
             userembed = discord.Embed(
                 title="Username: ",
-                description="%s - %s" % (usrname, usr.mention),
+                description=usrname,
                 color=discord.Color.red()
             )
             userembed.set_thumbnail(
@@ -290,7 +222,7 @@ class ManualCog(object):
         if usrname != "Rules Bot":  # CHANGE IMPORTANT
             userembed = discord.Embed(
                 title="Username: ",
-                description="%s - %s" % (usrname, usr.mention),
+                description=usrname,
                 color=discord.Color.green()
             )
             userembed.set_thumbnail(
