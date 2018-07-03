@@ -43,7 +43,7 @@ _You can also visit our [website][wiki]._
 **Step 4:** run the bot with python3.6 main.py
 
 ## Release History
-<img src="https://img.shields.io/badge/Version-2.0-green.svg" alt="version">
+<img src="https://img.shields.io/badge/Version-2.1-green.svg" alt="version">
 
 
 * v2.1
