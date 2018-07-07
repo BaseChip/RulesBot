@@ -1,4 +1,4 @@
-# env_RulesBot
+# RulesBot
 > Create server rules new users need to confirm first in order to access the server
 <br>
 <a href="https://discordbots.org/bot/389082834670845952" >
