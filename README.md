@@ -1,4 +1,4 @@
-# RulesBot
+# env_RulesBot
 > Create server rules new users need to confirm first in order to access the server
 <br>
 <a href="https://discordbots.org/bot/389082834670845952" >
@@ -6,6 +6,9 @@
 </a>
 <a href="https://discordbots.org/bot/389082834670845952" >
   <img src="https://discordbots.org/api/widget/status/389082834670845952.svg" alt="Status" />
+</a>
+<a href="https://status.thebotdev.de">
+  <img src="https://img.shields.io/badge/Status-https://status.thebotdev.de-blue.svg">
 </a>
 
 The Rules Bot helps you managing new members by providing an automated verification system using Discord's message reactions.
@@ -21,10 +24,13 @@ OS X & Linux:
 
 You need:
 ```sh
-• https://github.com/Rapptz/discord.py/archive/rewrite.zip
-• aiohttp
-• peewee
-• python3.6
+https://github.com/Rapptz/discord.py/archive/rewrite.zip
+aiohttp
+peewee
+flask
+requests_oauthlib
+requests
+https://github.com/romangraef/configlib/archive/master.zip
 ```
 ## Usage example
 
@@ -34,18 +40,26 @@ _You can also visit our [website][wiki]._
 
 ## Development setup
 
-**Step 1**: Make sure, you have the [requirment packages](requirements.txt) installed
+**Step 1**: Make sure, you have the [requirment packages](requirements.txt) installed (pip install -r requirements.txt)
 
 **Step 2:** Clone this repository with git clone `https://github.com/BaseChip/RulesBot`
 
-**Step 3:** Insert your Token into KEYS.py 
+**Step 3:** Insert your Token into your config (create a folder called config and a file there called config.json)
 
 **Step 4:** run the bot with python3.6 main.py
 
 ## Release History
-<img src="https://img.shields.io/badge/Version-2.1-green.svg" alt="version">
+<img src="https://img.shields.io/badge/Version-2.2-green.svg" alt="version">
 
-
+* v2.2
+    + NEW: ticket system (create_ticket)
+    + NEW: premium (premium)
+    + NEW: added ping to statuspage (status.thebotdev.de)
+    + NEW: remove a role on setup (available now)
+    + NEW: custom embed footer (just for premium members)
+    + NEW: custom embed color (just for premium members)
+    + BUGFIX: Bot should be much more stable now
+     
 * v2.1
     * NEW: extra Bot file for an bot who can test if the bot is online
     * NEW: mention in the log messages
@@ -92,12 +106,10 @@ Bot by: BaseChip#2390 // romangraef89#0998 // Skidder#0001
 **Partner**<br>
 https://dyn-box.de
 <br>
-**Donator**
-* solana Dracunculas#0297
 <!-- Markdown link & img dfn's -->
 [npm-image]: https://img.shields.io/npm/v/datadog-metrics.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/datadog-metrics
 [npm-downloads]: https://img.shields.io/npm/dm/datadog-metrics.svg?style=flat-square
 [travis-image]: https://img.shields.io/travis/dbader/node-datadog-metrics/master.svg
 [travis-url]: https://thebotdev.de
-[wiki]: https://thebotdev.de
+[wiki]: https://docs.thebotdev.de

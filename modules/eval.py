@@ -1,7 +1,10 @@
-from discord.ext import commands
 import re
 from typing import List, Dict, Pattern
+
 import discord
+from discord.ext import commands
+
+import checks
 
 REPLACEMENTS: Dict[Pattern, str] = {
     re.compile(r'<@!?(?P<id>[0-9]+)>'): '(guild.get_member({id}) if guild is not None else client.get_user({id}))',
@@ -48,13 +51,15 @@ async def handle_eval(message: discord.Message, client: discord.Client):
     try:
         exec(code, _globals, _locals)
     except Exception as e:
-        await message.channel.send(embed=discord.Embed(color=discord.Color.red(), description="Compiler Error: `%s`" % (str(e))))
+        await message.channel.send(
+            embed=discord.Embed(color=discord.Color.red(), description="Compiler Error: `%s`" % (str(e))))
         return
     result = {**_globals, **_locals}
     try:
         result = await result["code"](**variables)
     except Exception as e:
-        await message.channel.send(embed=discord.Embed(color=discord.Color.red(), description="Runtime Error: `%s`" % (str(e))))
+        await message.channel.send(
+            embed=discord.Embed(color=discord.Color.red(), description="Runtime Error: `%s`" % (str(e))))
         return
 
     return await channel.send("📥 Evaluation success: ```tr\n%r\n```" % result)
@@ -65,7 +70,7 @@ class EvalCog:
         self.bot = bot
 
     @commands.command(name='eval')
-    @commands.is_owner()
+    @checks.is_developer()
     async def eval_command(self, ctx: commands.Context):
         await handle_eval(ctx.message, self.bot)
 

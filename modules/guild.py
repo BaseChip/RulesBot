@@ -1,4 +1,4 @@
-from discord import Message, Embed, Color, TextChannel, Role
+from discord import Message, Embed, Color, TextChannel, Role, utils
 from discord.ext import commands
 from discord.ext.commands import Context as CommandContext
 from peewee import ModelSelect
@@ -42,8 +42,8 @@ class GuildManagement(object):
         try:
             awaiter: AdvancedAwaiter = AdvancedAwaiter(ctx)
             existing_rules: ModelSelect = ServerData.select().where(ServerData.serverid == ctx.guild.id)
-            if existing_rules.exists():  # TODO: Warnungstext verbessern
-                await ctx.send('Warning overwrite stuff')
+            if existing_rules.exists():
+                await ctx.send('Warning you overwrite your old setup')
             rules_channel: TextChannel = await awaiter.guild_channel(
                 "The setup for creating the server rules has been started successfully. First of all, please send me the "
                 "**channel** of the channel where you want the rules to appear later as mention (#yourchannel)",
@@ -61,7 +61,7 @@ class GuildManagement(object):
                 "please react with ❌", choices=actions.keys())
             action: str = actions[action]
             role: Role = await awaiter.guild_role(
-                "Almost done! This is the penultimate question. What role should I assign to the user "
+                "Almost done! What role should I assign to the user "
                 "if he or she accepts the rules?", list_ids=True)
             join_notifications: bool = await awaiter.yes_no_question(
                 'Do you want a notification for new members on join? y/n')
@@ -76,9 +76,17 @@ class GuildManagement(object):
                 decline_user_msg: str = await awaiter.text("Okay please send me now the text the user should get")
 
             log_channel: TextChannel = await awaiter.guild_channel(
-                "Well the very last question now and then the setup is done! Please mention now the "
+                "Well youre nearly finished! Please mention now the "
                 "channel where I should send all log files in, i. e. who has not "
                 "accepted the rules or who removed the reaction.", writable=True)
+            remove_role: bool = await awaiter.yes_no_question("Should I also remove a role when the user accept"
+                                                              " the rules? (y/n)")
+            if remove_role:
+                remove_role_id: role = await awaiter.guild_role("So then please send me the role id from the role"
+                                                                " I should remove")
+            else:
+                remove_role_id = 0
+
             await ctx.send(
                 embed=Embed(
                     color=Color.green(),
@@ -92,11 +100,14 @@ class GuildManagement(object):
                                 " !editmessage (see !help)",
                     color=0x27fcfc).set_author(name="Some usefull informations", url="http://thebotdev.de",
                                                icon_url="https://thebotdev.de/assets/img/Fragezeichen.png"))
+
             rules = await rules_channel.send(
                 embed=Embed(
                     color=Color.green(),
-                    description=rules_text).set_footer(
-                    text="Please accept the rules with ✅ or decline them with ❌"))
+                     description=rules_text).set_footer(
+                     text="Please accept the rules with ✅ or decline them with ❌"))
+            await ctx.send("If you would like to change the embed color or the footer text please have"
+                               f" a look at {ctx.prefix}premium")
 
             await rules.add_reaction("✅")
             await rules.add_reaction("❌")
@@ -104,6 +115,7 @@ class GuildManagement(object):
                 if existing_rules.exists():
                     existing_rules: ServerData = existing_rules.get()
                     existing_rules.delete_instance()
+
 
                 ServerData.create(
                     ruleschannel=rules_channel.id,

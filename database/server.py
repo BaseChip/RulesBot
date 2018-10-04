@@ -32,6 +32,7 @@ class ServerData(Model):
     ruletext = CharField(null=True)
     joinmsg = CharField(null=True)
     shjoin = CharField(null=True)
+    removeroleid = IntegerField(null=True)
     kickmsg = CharField(null=True)
     kick = CharField(null=True)
     reactime = IntegerField(null=True)

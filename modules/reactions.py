@@ -22,8 +22,7 @@ class ReactionsCog:
             channel: TextChannel = await awaiter.guild_channel('Okay the setup has started! first of all mention the'
                                                                ' channel in which your message was written and where'
                                                                ' I should add the reaction. Btw. you could cancel the '
-                                                               'setup with `@CANCEL@`\nThis feature is inspired by an'
-                                                               ' bot from Cryptix called [Flash](https://flashbot.de)')
+                                                               'setup with `@CANCEL@`')
             reaction_message: Message = await awaiter.as_message(
                 'So now please send me the message ID from the message where the reactions should been added. You can '
                 'get it by right-clicking on your message and copying it with `copy id`. This will not work until you '

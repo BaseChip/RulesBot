@@ -1,0 +1,9 @@
+venv/
+KEYS.py
+*.xml
+*.iml
+rulesbot.db
+*.http
+.pytest_cache
+config/
+**/__pycache__/
